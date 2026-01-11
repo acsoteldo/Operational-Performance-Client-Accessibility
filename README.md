@@ -76,20 +76,5 @@ The level of data science and machine learning talent within an organization pos
 For any inquiries or feedback, please contact acsoteldo01@gmail.com.
 
 ## References
-[^1]: Data Source: American Community Survey (ACS)
-https://api.census.gov/data/key_signup.html
-
-[^2]: Data Source: CDC Social Vulnerability Index (SVI)
-https://svi.cdc.gov/dataDownloads/data-download.html
-
-[^3]: Data Source: FEMA National Risk Index (NRI)
-https://resilience.climate.gov/datasets/FEMA%3A%3Anational-risk-index-census-tracts/about
-
-[^4]: Data Source: FEMA National Flood Hazard Layer (NFHL)
-https://www.arcgis.com/home/item.html?id=2b245b7f816044d7a779a61a5844be23&sublayer=0 
-
-[^5]: Data Source: NOAA Billion-Dollar Disasters
-https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0209268
-
-[^6]: Data Source: Census Tiger
-https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html
+[^1]: Data Source: Statistics Canada – 2021 Census Boundary Files
+https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/index2021-eng.cfm
