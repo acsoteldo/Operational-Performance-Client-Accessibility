@@ -13,48 +13,55 @@ Excel, Jupyter, Python, SQL, Tableau
 
 ### Data Sources:
 This analysis integrates the following cleaned and standardized datasets:
-* American Community Survey (ACS)[^1] – demographic and socioeconomic characteristics at the census tract level
-* CDC Social Vulnerability Index (SVI)[^2] – measures community vulnerability across socioeconomic status, household composition, minority status, and housing/transportation
-* FEMA National Risk Index (NRI)[^3] – multi-hazard risk metrics and expected annual loss estimates
-* FEMA National Flood Hazard Layer (NFHL)[^4] – spatial floodplain boundaries used to determine physical flood exposure
-* NOAA Billion-Dollar Disasters[^5] – historical context on the frequency and cost of extreme climate events
+* Statistics Canada Census Metropolitan Areas (CMA)[^1] – official geographic boundaries used to define the Toronto Census Metropolitan Area and ensure consistent spatial scope
+* City of Toronto Open Data Neighbourhood Boundaries (WGS84)[^2] – neighborhood level polygons used to assign client residence areas within the City of Toronto
+* OpenStreetMap (OSM)[^3] – branch and service location data, including geographic coordinates and address attributes for major Canadian financial institutions
+* Synthetic Client & Product Data – generated to simulate realistic wealth management relationships while avoiding personally identifiable information (PII), including account tenure, product mix, transaction behavior, and funding balances
+* Synthetic Employee & Branch Data – generated to represent branch staffing structures, including Branch Managers and relationship roles, aligned with realistic banking hierarchies
 
-All tract-level datasets are joined using a standardized GEOID, while flood exposure is derived through spatial intersection with FEMA floodplain polygons (see _data/_ for questions).
+The analysis will be based on the cleaned master dataset, which has 71 fields, including:
+* cust_id: unique synthetic customer identifier (join key)
+* cust_name: synthetic customer name
+* first_acct_open_dt: opening date of the customer’s first account
+* tenure_days: total relationship tenure in days
+* uses_mobile_banking: flag for active digital banking usage
+* avg_daily_txn_count: estimated average daily transaction volume per client
+* total_deposit_balance: total client deposit balance across all products
+* nidda_balance: non-interest deposit balance
+* ibb_balance: interest deposit balance
+* has_checking, has_savings, has_money_market, has_cd: product presence flags
+* has_credit_card: active credit card flag
+* total_products: total number of active products and services
+* primary_branch_id: customer’s most frequently used branch
+* primary_branch_in_top3: flag whether the primary branch is among the three closest branches
+* top1_branch_id, top2_branch_id, top3_branch_id: nearest branches by distance
+* top1_miles, top2_miles, top3_miles: distance to each branch
+* top1_minutes, top2_minutes, top3_minutes: estimated travel time
 
-The analysis will be based on the cleaned master dataset, which has 84 fields, including:
-* "geoid": 11-digit census tract GEOID (state+county+tract). Join key.
-* "acs_median_hh_income": ACS median household income (USD).
-* "acs_population": ACS total population estimate.
-* "svi_overall_pctile": CDC SVI overall percentile (0-1, higher = more vulnerable).
-* "nri_composite_score": FEMA NRI composite risk score.
-* "nri_eal_total_usd": FEMA NRI expected annual loss (USD), composite.
-* "nfhl_in_floodplain": Boolean: tract intersects FEMA NFHL flood zone polygons.
-
-Geographic Note: All analysis is conducted at the census tract level. City and ZIP fields are provided for interpretability [^6].
+Note: Branch accessibility metrics (distance and estimated travel time) are calculated using projected geometries (UTM Zone 17N) to ensure accurate distance measurements.
   
-
 ## Problem Definition
-Although South Florida is widely recognized as a climate-vulnerable region, climate risk is unevenly distributed across communities. Many households face elevated financial risk due to the combined effects of hazard exposure, limited adaptive capacity, and underlying social vulnerability.
+Although the Toronto metropolitan region is generally characterized by strong economic fundamentals and high financial inclusion, service accessibility and relationship depth are unevenly distributed across clients and neighborhoods. Differences in proximity to financial service locations, branch coverage, and digital adoption can materially affect client engagement, funding quality, and operational efficiency.
 
 ### Relevance:
-Understanding how climate-related hazards translate into household financial instability at the census tract level is crucial for several reasons:
-* Policymakers and planners need tract-level insights into where climate hazards intersect with social vulnerability to make informed decisions about climate adaptation investments, land-use planning, and resilience funding allocation.
-* Housing and financial stability stakeholders can use localized risk information to better assess potential wealth loss, housing instability, and displacement risks associated with flooding and extreme weather events.
-* Community advocates and equity-focused organizations may leverage tract-level climate risk data to identify underserved communities facing disproportionate financial impacts and to support targeted resilience and mitigation efforts.
-* Researchers and analysts can use integrated hazard, vulnerability, and exposure data to move beyond regional averages and develop more accurate, equity-centered models of climate risk and household financial outcomes.
+Understanding how branch accessibility, service proximity, and client behavior translate into differences in relationship depth and funding quality is critical for several reasons:
+* Financial institutions and branch planners require client-level and neighborhood-aware insights to evaluate how physical accessibility and digital adoption influence engagement, product utilization, and branch performance, informing decisions around branch placement, consolidation, and staffing.
+* Wealth management and retail banking teams can use localized accessibility metrics to assess how distance and travel time impact client behavior, funding composition (NIDDA vs. interest-bearing balances), and reliance on self-service channels.
+* Operational and strategy stakeholders may leverage integrated client, product, and geographic data to identify service gaps, underserved areas, and opportunities for targeted relationship management or digital enablement.
+* Analysts and decision-makers benefit from moving beyond aggregate branch metrics to develop more precise, client-centered models of service utilization, funding quality, and operational efficiency across a large metropolitan market.
 
 ## Hypothesis
-Households located in census tracts with higher exposure to climate-related hazards (particularly flooding and hurricanes) experience greater financial instability due to elevated expected losses and higher social vulnerability, increasing the risk of wealth erosion and displacement.
+Customers located farther from physical financial service locations or outside dense branch coverage areas exhibit greater reliance on digital channels, lower in-person service utilization, and variations in funding quality.
 
 ## Vision
-To support climate-informed, equity-focused policy decisions by revealing how climate hazards translate into household-level financial and wealth risk at the census tract scale.
+To support data-driven, customer-centric decision-making in retail and wealth banking by revealing how service accessibility, branch proximity, and client behavior translate into differences in relationship depth, funding quality, and operational performance across a large metropolitan market.
 
 ## Objective
-The primary objective of this analysis is to gain a comprehensive understanding of how climate-related hazards in South Florida expose households to financial instability and wealth risk at the census tract level. By integrating multiple federal datasets and examining the interaction between hazard exposure, expected losses, and social vulnerability, this report aims to address the following objectives:
-* Visualize the spatial distribution of climate hazard exposure and floodplain overlap across South Florida census tracts to identify areas with heightened physical risk.
-* Examine how social vulnerability varies across tracts with differing levels of climate hazard exposure, highlighting communities where limited adaptive capacity may amplify financial impacts.
-* Assess expected annual losses as a proxy for household wealth risk, evaluating how financial exposure differs across tracts facing similar climate hazards.
-* Identify census tracts where climate risk and social vulnerability intersect, highlighting priority areas for equitable climate adaptation, resilience planning, and policy intervention.
+The primary objective of this analysis is to develop a comprehensive understanding of how branch accessibility, service proximity, and customer behavior shape relationship depth and funding quality across the Toronto metropolitan area. By integrating geographic service data with client-level behavioral and product metrics, this report aims to address the following objectives:
+* Visualize the spatial distribution of branch coverage and customer residence locations to identify areas with reduced physical access to in-person financial services.
+* Examine how customer engagement and digital adoption vary with distance and travel time to branches, highlighting patterns in service utilization across neighborhoods.
+* Assess funding composition (NIDDA vs. interest-bearing balances) as a proxy for relationship quality, evaluating how deposit mix differs among clients with similar balances but differing accessibility profiles.
+* Identify customer segments and geographic areas where accessibility constraints and behavioral patterns intersect, highlighting opportunities for targeted branch strategy, staffing optimization, and digital enablement initiatives.
 
 ## Review of the Literature
 The level of data science and machine learning talent within an organization positively correlates with the adoption of ML technologies. As highlighted in the LinkedIn article, the modern process industry is driven by big data, which includes vast amounts of structured and unstructured data posing significant challenges in efficient data interpretation and management. National AI adoption trends indicate that sectors with high current AI usage will maintain their lead, while sectors such as Accommodation and Food Services exhibit lower adoption rates. The BTOS AI findings, consistent with the 2019 Annual Business Survey (ABS), show that sectors with higher adoption rates have more established practices and experienced talent. In the EdTech industry, machine learning is revolutionizing learning experiences through adaptive learning systems, content recommendation systems, and predictive analytics, contributing to market growth projections by 2027. Despite these advancements, CompTIA identifies barriers to AI adoption, including a lack of skilled professionals, unclear ROI metrics, and the complexity of AI systems. Addressing these barriers through targeted strategies and education can facilitate wider AI and ML adoption, leading to enhanced efficiency and competitiveness in organizations. Consequently, fostering skilled talent within organizations is essential for driving successful ML and AI integration across various industries.
@@ -76,10 +83,11 @@ The level of data science and machine learning talent within an organization pos
 For any inquiries or feedback, please contact acsoteldo01@gmail.com.
 
 ## References
-[^1]: Data Source: Statistics Canada CMA Boundary
+[^1]: Data Source: Statistics Canada Census Metropolitan Areas (CMA)
 https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/index2021-eng.cfm
 
-[^2]: Data Source: OpenStreetMap (OSM)
-
-[^3]: Data Source: City of Toronto Open Data Portal — Neighbourhood Boundaries
+[^2]: Data Source: City of Toronto Open Data Neighbourhood Boundaries (WGS84)
 https://open.toronto.ca/dataset/neighbourhoods/
+
+[^3]: Data Source: OpenStreetMap (OSM)
+
